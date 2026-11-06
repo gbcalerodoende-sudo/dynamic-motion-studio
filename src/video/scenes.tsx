@@ -6,6 +6,7 @@ import {AccentLine,BottomIndex,EdgeIcon,OrbitRing,SceneFade,SectionTag,TextRevea
 type SceneProps={data:MotionProps;palette:Palette;duration:number};
 const baseTitle:CSSProperties={fontFamily:sans,fontWeight:950,lineHeight:.92,letterSpacing:-9,textTransform:"uppercase",margin:0,overflowWrap:"anywhere"};
 const smallCopy:CSSProperties={fontFamily:mono,fontSize:27,letterSpacing:3.5,fontWeight:700,lineHeight:1.65};
+const fitFont=(value:string,ideal:number,target:number,min=55)=>Math.min(ideal,Math.max(min,Math.round(ideal*target/Math.max(target,value.length))));
 const safeWords=(value:string)=>{const words=value.split(/\s+/),split=Math.ceil(words.length/2);return [words.slice(0,split).join(" "),words.slice(split).join(" ")||"EM MOVIMENTO"]};
 const staged=(frame:number,duration:number)=>({opacity:enter(frame,0,15)* (1-enter(frame,duration-20,20))});
 const SignalBar=({palette,frame}:{palette:Palette,frame:number})=><div style={{display:"flex",alignItems:"center",gap:7,height:45}}>
@@ -32,8 +33,8 @@ export const SceneIntro=({data,palette,duration}:SceneProps)=>{
   <div style={{position:"absolute",left:85,top:490,right:85}}>
    <TextReveal frame={frame} delay={8}><SectionTag palette={palette}>{data.kicker}</SectionTag></TextReveal>
    <div style={{marginTop:65,position:"relative"}}>
-    <TextReveal frame={frame} delay={25}><div style={{...baseTitle,color:palette.light,fontSize:141,textShadow:"0 4px 30px #020309a8",maxWidth:910}}>{first}</div></TextReveal>
-    <TextReveal frame={frame} delay={39}><div style={{...baseTitle,...textGrad("linear-gradient(110deg,"+palette.primary+" 7%,"+palette.secondary+" 95%)"),fontSize:146,marginTop:12,maxWidth:940,filter:"drop-shadow(0 0 35px "+palette.primary+"5c)"}}>{second}</div></TextReveal>
+    <TextReveal frame={frame} delay={25}><div style={{...baseTitle,color:palette.light,fontSize:fitFont(first,141,10),whiteSpace:"nowrap",textShadow:"0 4px 30px #020309a8",maxWidth:910}}>{first}</div></TextReveal>
+    <TextReveal frame={frame} delay={39}><div style={{...baseTitle,...textGrad("linear-gradient(110deg,"+palette.primary+" 7%,"+palette.secondary+" 95%)"),fontSize:fitFont(second,146,10),whiteSpace:"nowrap",marginTop:12,maxWidth:940,filter:"drop-shadow(0 0 35px "+palette.primary+"5c)"}}>{second}</div></TextReveal>
    </div>
    <div style={{marginTop:54}}><AccentLine palette={palette} width={690} progress={enter(frame,48,40)}/></div>
    <TextReveal frame={frame} delay={67}><div style={{fontFamily:mono,fontSize:26,color:palette.muted,letterSpacing:5.1,marginTop:38,lineHeight:1.8}}>{data.subhead}</div></TextReveal>
@@ -147,7 +148,7 @@ export const SceneKinetic=({data,palette,duration}:SceneProps)=>{
     return <div key={i} style={{position:"absolute",left:30,top:560+i*63,right:30,height:480,
       opacity:v,transform:"rotate("+(i===1?-7:i===2?5:-3)+"deg) scale("+scale+") translateX("+(1-enter(local,0,19))*(i%2?200:-200)+"px)",transformOrigin:"50% 50%",filter:"drop-shadow(0 0 55px "+palette.primary+"73)",
       display:"grid",placeItems:"center",textAlign:"center"}}>
-       <div style={{...baseTitle,fontSize:i===2?194:225,...(i===1?textStroke(palette.light):i===2?textGrad("linear-gradient(110deg,"+palette.secondary+","+palette.primary+")"):{color:palette.light}),lineHeight:1}}>{data.words[i]}</div>
+       <div style={{...baseTitle,fontSize:fitFont(data.words[i]||"",i===2?194:225,6,75),whiteSpace:"nowrap",...(i===1?textStroke(palette.light):i===2?textGrad("linear-gradient(110deg,"+palette.secondary+","+palette.primary+")"):{color:palette.light}),lineHeight:1}}>{data.words[i]}</div>
      </div>
   })}
   <div style={{position:"absolute",left:-250,top:680,width:1540,height:720,pointerEvents:"none"}}>
@@ -184,8 +185,8 @@ export const SceneOutro=({data,palette,duration}:SceneProps)=>{
    </div>
   </div>
   <div style={{position:"absolute",left:64,right:64,top:1040,textAlign:"center"}}>
-   <TextReveal frame={frame} delay={55}><div style={{...baseTitle,fontSize:111,color:palette.light,lineHeight:.98}}>{first}</div></TextReveal>
-   <TextReveal frame={frame} delay={73}><div style={{...baseTitle,fontSize:106,marginTop:8,...textGrad("linear-gradient(90deg,"+palette.primary+","+palette.secondary+")")}}>{second}</div></TextReveal>
+   <TextReveal frame={frame} delay={55}><div style={{...baseTitle,fontSize:fitFont(first,111,14,58),whiteSpace:"nowrap",color:palette.light,lineHeight:.98}}>{first}</div></TextReveal>
+   <TextReveal frame={frame} delay={73}><div style={{...baseTitle,fontSize:fitFont(second,106,14,55),whiteSpace:"nowrap",marginTop:8,...textGrad("linear-gradient(90deg,"+palette.primary+","+palette.secondary+")")}}>{second}</div></TextReveal>
    <TextReveal frame={frame} delay={106}><div style={{margin:"74px auto 0",width:645,minHeight:108,background:"linear-gradient(90deg,"+palette.primary+","+palette.secondary+")",display:"flex",alignItems:"center",justifyContent:"center",boxShadow:"0 0 75px "+palette.primary+"75",transform:"skewX(-6deg)"}}>
      <div style={{fontFamily:sans,fontSize:36,fontWeight:1000,letterSpacing:3,color:"#08101b",transform:"skewX(6deg)"}}>CRIE. ANIME. IMPACTE. ↗</div>
    </div></TextReveal>
