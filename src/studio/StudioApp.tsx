@@ -65,7 +65,7 @@ export function StudioApp(){
  });
  const seek=(n:number)=>{const f=Math.max(0,Math.min(VIDEO_FRAMES-1,Math.round(n)));playerRef.current?.seekTo(f);setFrame(f)};
  const toggle=()=>{playerRef.current?.toggle()};
- const toggleMute=()=>{const next=!muted;playerRef.current?.setMuted(next);setMuted(next)};
+ const toggleMute=()=>{const next=!muted;if(next)playerRef.current?.mute();else playerRef.current?.unmute();setMuted(next)};
  const reset=()=>{setDraft(DEFAULT_MOTION_PROPS);seek(0);setToast("Roteiro de demonstração restaurado.")};
  const copyJSON=async()=>{
   try{await navigator.clipboard.writeText(JSON.stringify(draft));setToast("JSON copiado! Cole em 'props_json' no GitHub Actions.")}
