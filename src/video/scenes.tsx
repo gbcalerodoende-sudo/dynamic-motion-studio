@@ -7,7 +7,7 @@ type SceneProps={data:MotionProps;palette:Palette;duration:number};
 const baseTitle:CSSProperties={fontFamily:sans,fontWeight:950,lineHeight:.92,letterSpacing:-9,textTransform:"uppercase",margin:0,overflowWrap:"anywhere"};
 const smallCopy:CSSProperties={fontFamily:mono,fontSize:27,letterSpacing:3.5,fontWeight:700,lineHeight:1.65};
 const fitFont=(value:string,ideal:number,target:number,min=55)=>Math.min(ideal,Math.max(min,Math.round(ideal*target/Math.max(target,value.length))));
-const safeWords=(value:string)=>{const words=value.split(/\s+/),split=Math.ceil(words.length/2);return [words.slice(0,split).join(" "),words.slice(split).join(" ")||"EM MOVIMENTO"]};
+const safeWords=(value:string):[string,string]=>{const words=value.split(/\s+/),split=Math.ceil(words.length/2);return [words.slice(0,split).join(" ")||"CRIE",words.slice(split).join(" ")||"EM MOVIMENTO"]};
 const staged=(frame:number,duration:number)=>({opacity:enter(frame,0,15)* (1-enter(frame,duration-20,20))});
 const SignalBar=({palette,frame}:{palette:Palette,frame:number})=><div style={{display:"flex",alignItems:"center",gap:7,height:45}}>
   {Array.from({length:18},(_,i)=><span key={i} style={{width:5,height:8+Math.abs(Math.sin(i*2.31+frame*.15))*38,background:i%3===0?palette.secondary:palette.primary,boxShadow:"0 0 8px "+palette.primary+"55"}}/>)}
