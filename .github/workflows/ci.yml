@@ -1,0 +1,32 @@
+name: Validate Motion Studio
+
+on:
+  pull_request:
+  push:
+    branches: ["feat/cinematic-motion-studio"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install free open-source dependencies
+        run: npm install --no-audit --no-fund
+      - name: Validate the video configuration
+        run: npm run check:config
+      - name: Strict TypeScript check
+        run: npm run typecheck
+      - name: Generate original soundtrack and production web build
+        run: npm run build
+      - name: Verify generated assets
+        run: |
+          test -f dist/index.html
+          test -f dist/original-score.wav

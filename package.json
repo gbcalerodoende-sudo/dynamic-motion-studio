@@ -1,0 +1,32 @@
+{
+  "name": "dynamic-motion-studio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "audio": "node scripts/generate-audio.mjs",
+    "dev": "npm run audio && vite --host 0.0.0.0",
+    "studio": "npm run audio && remotion studio src/video/index.ts",
+    "build": "npm run audio && tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit",
+    "render": "npm run audio && remotion render src/video/index.ts MotionShowreel out/dynamic-motion.mp4 --props=video.config.json --codec=h264 --crf=17 --concurrency=2",
+    "render:preview": "npm run audio && remotion render src/video/index.ts MotionShowreel out/preview.mp4 --props=video.config.json --codec=h264 --concurrency=2 --width=540 --height=960 --frames=0-299",
+    "check:config": "node scripts/check-config.mjs"
+  },
+  "dependencies": {
+    "@remotion/player": "4.0.541",
+    "remotion": "4.0.541",
+    "lucide-react": "0.468.0",
+    "react": "19.2.0",
+    "react-dom": "19.2.0"
+  },
+  "devDependencies": {
+    "@remotion/cli": "4.0.541",
+    "@types/react": "19.2.0",
+    "@types/react-dom": "19.2.0",
+    "@types/node": "22.18.8",
+    "@vitejs/plugin-react": "5.0.4",
+    "typescript": "5.9.3",
+    "vite": "7.1.12"
+  }
+}

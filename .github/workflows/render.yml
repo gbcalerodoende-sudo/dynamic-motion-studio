@@ -1,0 +1,70 @@
+name: Render Motion MP4
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "src/**"
+      - "scripts/**"
+      - "video.config.json"
+      - "package.json"
+      - ".github/workflows/render.yml"
+  workflow_dispatch:
+    inputs:
+      props_json:
+        description: "JSON copiado do editor (opcional, deixe vazio para demo)"
+        type: string
+        required: false
+      quality:
+        description: "full = 1080x1920 60fps 24s; preview = 540x960 60fps 5s"
+        type: choice
+        required: true
+        default: "full"
+        options:
+          - full
+          - preview
+
+permissions:
+  contents: read
+
+concurrency:
+  group: motion-render-${{ github.ref }}-${{ github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      RENDER_PROPS_JSON: ${{ github.event.inputs.props_json }}
+      RENDER_MODE: ${{ github.event.inputs.quality || 'preview' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Synthesize original royalty-free soundtrack
+        run: npm run audio
+      - name: Prepare user-provided props safely
+        run: node scripts/make-render-config.mjs
+      - name: Install Remotion Headless Chrome
+        run: npx remotion browser ensure
+      - name: Render MP4
+        shell: bash
+        run: |
+          mkdir -p out
+          if [ "$RENDER_MODE" = "full" ]; then
+            npx remotion render src/video/index.ts MotionShowreel out/dynamic-motion-full.mp4 --props=.render-props.json --codec=h264 --crf=18 --concurrency=2
+          else
+            npx remotion render src/video/index.ts MotionShowreel out/dynamic-motion-preview.mp4 --props=.render-props.json --codec=h264 --crf=20 --concurrency=2 --width=540 --height=960 --frames=0-299
+          fi
+      - name: Upload downloadable MP4
+        uses: actions/upload-artifact@v4
+        with:
+          name: dynamic-motion-${{ env.RENDER_MODE }}-${{ github.run_number }}
+          path: out/*.mp4
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 0
