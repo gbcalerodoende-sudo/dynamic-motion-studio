@@ -1,0 +1,10 @@
+node_modules/
+dist/
+out/
+.render-props.json
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+public/original-score.wav
