@@ -58,7 +58,7 @@ jobs:
           if [ "$RENDER_MODE" = "full" ]; then
             npx remotion render src/video/index.ts MotionShowreel out/dynamic-motion-full.mp4 --props=.render-props.json --codec=h264 --crf=18 --concurrency=2
           else
-            npx remotion render src/video/index.ts MotionShowreel out/dynamic-motion-preview.mp4 --props=.render-props.json --codec=h264 --crf=20 --concurrency=2 --width=540 --height=960 --frames=0-299
+            npx remotion render src/video/index.ts MotionShowreel out/dynamic-motion-preview.mp4 --props=.render-props.json --codec=h264 --crf=20 --concurrency=2 --scale=0.5 --frames=0-299
           fi
       - name: Upload downloadable MP4
         uses: actions/upload-artifact@v4
