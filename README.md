@@ -28,7 +28,7 @@ O editor é estático; as alterações são armazenadas no seu navegador, não m
 2. Vá à aba **Exportar** e clique em **Copiar JSON da edição**.
 3. Abra **[Actions → Render Motion MP4](https://github.com/gbcalerodoende-sudo/dynamic-motion-studio/actions/workflows/render.yml)**.
 4. Clique em **Run workflow**; cole o JSON no campo chamado props_json. Se não preencher, usa a demonstração padrão.
-5. Em quality, selecione **full** para 1080 × 1920, 60 FPS e 24s; ou **preview** para primeiros 5 segundos em 540 × 960.
+5. Em quality, selecione **full** para 1080 × 1920, 60 FPS e 24s; ou **preview** para primeiros 5 segundos reduzidos proporcionalmente para 540 × 960.
 6. Após a execução ficar verde, abra-a e baixe o MP4 compactado como ZIP em **Artifacts**.
 
 Ao enviar código novo para main, o workflow executa automaticamente apenas o preview curto. A renderização completa é manual para economizar minutos gratuitos. Os minutos e armazenamento do GitHub têm cotas; quando acabarem, o serviço pode parar até a renovação da cota ou exigir outra solução.
